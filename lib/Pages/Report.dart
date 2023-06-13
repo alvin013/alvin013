@@ -11,16 +11,16 @@ class Reportpage extends StatefulWidget {
   State<Reportpage> createState() => _ReportpageState();
 }
 
-var conn;
-
 class _ReportpageState extends State<Reportpage> {
   List<dynamic> results = [];
 
   getData() async {
     try {
-      conn = await PostgresConnection.getConnection();
       // print("connected");
-      results = await conn.mappedResultsQuery('SELECT * FROM user_reg');
+      await PostgresConnection.forceConnection();
+
+      results = await PostgresConnection.conn
+          .mappedResultsQuery('SELECT * FROM user_reg');
       print("result = " + results.toString());
 
       setState(() {});
@@ -31,7 +31,7 @@ class _ReportpageState extends State<Reportpage> {
       // ...
     } finally {
       print("closing connection");
-      await conn.close();
+      //await conn.close();
     }
     // This block will always execute
   }
@@ -46,37 +46,29 @@ class _ReportpageState extends State<Reportpage> {
   Widget build(BuildContext context) {
     // print("here : " + results.toString());
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: [
-              ListTile(
+    return  Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: [
+            /* ListTile(
                 leading: Icon(Icons.person),
                 title: Text(results[0]['user_reg']['full_name'].toString()),
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: Text('Flutter Demo'),
-        ),
-        body: ListView.builder(
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: Icon(Icons.person),
-              title: Text(results[index]['user_reg']['full_name'].toString()),
-            );
-          },
+              ),*/
+          ],
         ),
       ),
-
+      appBar: AppBar(
+        title: Text('Flutter Demo'),
+      ),
+      body: ListView.builder(
+        itemCount: results.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Icon(Icons.person),
+            title: Text(results[index]['user_reg']['full_name'].toString()),
+          );
+        },
+      ),
     );
 
     // return Scaffold(

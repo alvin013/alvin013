@@ -9,18 +9,25 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'Components/Palette.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-void main() => runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+import 'db/connection.dart';
 
-        routes: {
-          'SplashScreen': (context) => LoginForm(),
-          'LoginForm': (context) => Homepage(),
-          'LoginForm': (context) => Thirdpage(),
-          'Thirdpage': (context) => Tomarpage(),
-          'Thirdpage': (context) => Dosyapage(),
-        },
-        home: SplashScreen(),
-      ),
-    );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PostgresConnection.getConnection();
+
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+
+      routes: {
+        'SplashScreen': (context) => LoginForm(),
+        'LoginForm': (context) => Homepage(),
+        'LoginForm': (context) => Thirdpage(),
+        'Thirdpage': (context) => Tomarpage(),
+        'Thirdpage': (context) => Dosyapage(),
+      },
+      home: SplashScreen(),
+    ),
+  );
+}
